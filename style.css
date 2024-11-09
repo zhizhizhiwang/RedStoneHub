@@ -51,6 +51,7 @@ body {
 }
 
 .quote {
+    padding-top: 20px;
     font-size: 18px;
     color: #666;
     padding: 20px;
