@@ -1,20 +1,61 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>新闻</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>新闻</title>
+</head>
 
 <body>
-<a href="https://docs.qq.com/sheet/DY2FTWXlFdWhQS2RS?tab=000001" target="_blank" rel="noreferrer">选择整合包投票 (于2-24-11-09 12:00截止)</a>
-        <br>
-        <iframe src="https://docs.qq.com/sheet/DY2FTWXlFdWhQS2RS?tab=000001" width="80%" height="800"></iframe>
-        <br>
-        <a href="https://docs.qq.com/sheet/DY3BIeEhzU0pFZkVX?tab=BB08J2" target="_blank" rel="noreferrer">服务器白名单登记</a>
-        <br>
-        <iframe src="https://docs.qq.com/sheet/DY3BIeEhzU0pFZkVX" width="80%" height="800"></iframe>
-        <br>
-        当有必要时, 服务器会启用白名单。我希望这件事不会发生, 进行白名单登记属于有备无患<br>
+    <div class="header">
+        <h1>
+            红石社新闻页
+        </h1>
+    </div>
 
-        <a href="main.html">回到主页</a>
+    <div class="content">
+
+        <p>
+            <a href="https://docs.qq.com/sheet/DY2FTWXlFdWhQS2RS?tab=000001" target="_blank" rel="noreferrer">选择整合包投票
+                (于2-24-11-09 12:00截止)</a>
+        </p>
+        <p>
+            <input type="checkbox" id="toggle-button-2">
+            <label for="toggle-button-2">查看</label>
+        <div class="element" id="element-2" style="height: 0px;">
+            <iframe src="https://docs.qq.com/sheet/DY2FTWXlFdWhQS2RS?tab=000001" width="100%" height="1000"></iframe>
+        </div>
+        </p>
+
+
+        <p>
+            <a href="https://docs.qq.com/sheet/DY3BIeEhzU0pFZkVX?tab=BB08J2" target="_blank"
+                rel="noreferrer">服务器白名单登记</a>
+        </p>
+        <input type="checkbox" id="toggle-button-1">
+        <label for="toggle-button-1">查看</label>
+        <div class="element" id="element-1" style="height: 0px;">
+            <iframe src="https://docs.qq.com/sheet/DY3BIeEhzU0pFZkVX" width="80%" height="1000"></iframe>
+        </div>
+        <script src="buttom.js"></script>
+        <div class="quote">
+            当有必要时, 服务器会启用白名单。我希望这件事不会发生, 进行白名单登记属于有备无患<br>
+            请在这里为你取一个仅包含英文, 数字, 允许的特殊符号(-_等)
+        </div>
+        </p>
+    </div>
+
+    <div class="nav">
+        <ul>
+            <li><a href="home.html">回到主页</a></li>
+        </ul>
+    </div>
+
+
+    <div class="footer copyleft">
+        <p>&#x1F12F;copyleft by zhizhizhiwang</p>
+    </div>
 </body>
+
 </html>
