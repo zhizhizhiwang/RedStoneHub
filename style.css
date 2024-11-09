@@ -71,6 +71,15 @@ body {
     overflow: hidden;
 }
 
+.link {
+    background-color: #333;
+    color: #fff;
+}
+
+.status {
+    background-color: white;
+}
+
 
 
 a {
