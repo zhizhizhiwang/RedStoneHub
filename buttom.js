@@ -14,7 +14,7 @@ toggleButton_1.addEventListener('click', function () {
 
 toggleButton_2.addEventListener('click', function () {
     if (element_2.style.height === '0px') {
-        element_2.style.height = '1000px';
+        element_2.style.height = '700px';
     } else {
         element_2.style.height = '0px';
     }
