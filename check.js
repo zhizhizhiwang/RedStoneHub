@@ -6,7 +6,7 @@ paragraphs.forEach((paragraph) => {
     const uuid = paragraph.getAttribute('data-uuid');
 
     // 构建请求的 URL，发送 GET 请求
-    const url = `http://cz.zhizhiwang.us.kg:23244/?uuid=${uuid}`;
+    const url = `https://api.zhizhiwang.us.kg/?uuid=${uuid}`;
     // const url = `http://localhost:3000/?uuid=${uuid}`
     // 使用 fetch 向服务器发起 GET 请求（fetch 默认是 GET）
 
@@ -43,10 +43,10 @@ paragraphs.forEach((paragraph) => {
         .catch((error) => {
             if (error.message.includes('Mixed Content')) {
                 console.error('错误：HTTPS 强制导致的错误');
-                paragraph.textContent = '请求失败，使用了HTTPS';
+                paragraph.textContent = '请求失败，使用了HTTP';
             } else {
                 console.error('错误：', error);
-                paragraph.textContent = `请求失败，请稍后再试。${error.message}`;
+                paragraph.textContent = `请求失败，请稍后再试。error:${error.message} data:${error.data}`;
             }
         });
 });
