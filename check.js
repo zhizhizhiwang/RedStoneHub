@@ -32,7 +32,7 @@ paragraphs.forEach((paragraph) => {
                     paragraph.textContent = "实例已停止。";  // 假设 status 为0 时，表示实例已停止
                 } else if (status === -1) {
                     if (paragraph.textContent != "waitting") {
-                        paragraph.textContent = "实例状态未知。";  // 假设 status 为 -1 时，表示状态未知
+                        paragraph.textContent = `实例状态未知。${data.data.message}`;  // 假设 status 为 -1 时，表示状态未知
                         setTimeout(fetchData, 1000); // 1秒后重试
                     }
                 } else if (status === 1) {
