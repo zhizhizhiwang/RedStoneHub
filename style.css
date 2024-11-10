@@ -77,7 +77,10 @@ body {
 }
 
 .status {
-    background-color: white;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 10px;
+    padding: 10px 10px;
 }
 
 
