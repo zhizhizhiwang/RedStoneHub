@@ -33,7 +33,7 @@ paragraphs.forEach((paragraph) => {
                 } else if (status === -1) {
                     if (paragraph.textContent != "waitting") {
                         paragraph.textContent = "实例状态未知。";  // 假设 status 为 -1 时，表示状态未知
-                        setTimeout(fetchData, 1000); // 3秒后重试
+                        setTimeout(fetchData, 1000); // 1秒后重试
                     }
                 } else if (status === 1) {
                     paragraph.textContent = "实例停止中。";
@@ -50,7 +50,7 @@ paragraphs.forEach((paragraph) => {
                 } else {
                     console.error('错误：', error);
                     paragraph.textContent = `请求失败，请稍后再试。error:${error.message} data:${error.data}`;
-                    setTimeout(fetchData, 1000); // 3秒后重试
+                    setTimeout(fetchData, 1000); // 1秒后重试
                 }
             });
     }
