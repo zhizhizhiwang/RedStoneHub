@@ -31,7 +31,8 @@ paragraphs.forEach((paragraph) => {
             } else if (status === 0) {
                 paragraph.textContent = "实例已停止。";  // 假设 status 为0 时，表示实例已停止
             } else if (status === -1) {
-                paragraph.textContent = "实例状态未知。";  // 假设 status 为 -1 时，表示状态未知
+                if (paragraph.textContent != waitting)
+                {paragraph.textContent = "实例状态未知。";}  // 假设 status 为 -1 时，表示状态未知
             } else if (status === 1) {
                 paragraph.textContent = "实例停止中。";
             } else if (status === 2) {
