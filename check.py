@@ -3,7 +3,7 @@
 import asyncio
 import http.client
 import urllib.parse
-import time
+import datetime
 import mcstatus
 
 def extract_uuid(request):
@@ -24,6 +24,7 @@ async def handle_tcp_connection(reader, writer):
     data = await reader.read(1024)
     received_data = data.decode('utf-8',errors='replace')
     uuid_value = extract_uuid(received_data)
+    print("------------------------------------------------------------------------")
     print(f'接收到的数据: {received_data}')
 
     http_response = await send_http_request(uuid_value)
@@ -49,8 +50,9 @@ async def send_http_request(uuid_value):
     response = conn.getresponse()
     response_data = response.read()
     print(f'HTTP 请求状态码: {response.status}')
-    print(time.time())
-    print(response_data.decode())
+    print(datetime.datetime.now())
+#    print(response_data.decode())
+    print("------------------------------------------------------------------------")
     return response_data.decode()
 
 async def main():
