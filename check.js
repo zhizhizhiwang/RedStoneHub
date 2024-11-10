@@ -1,4 +1,6 @@
 const paragraphs = document.querySelectorAll('.status');
+const maxRetries = 5; // 最大重试次数
+let retryCount = 0; // 当前重试次数
 
 paragraphs.forEach((paragraph) => {
     // 获取每个段落的 data-uuid 属性
@@ -33,7 +35,12 @@ paragraphs.forEach((paragraph) => {
                 } else if (status === -1) {
                     if (paragraph.textContent != "waitting") {
                         paragraph.textContent = `实例状态未知。${data.data.message}`;  // 假设 status 为 -1 时，表示状态未知
-                        setTimeout(fetchData, 1000); // 1秒后重试
+                        retryCount++;
+                        if (retryCount <= maxRetries) {
+                            setTimeout(fetchData, 3000); // 3秒后重试
+                        } else {
+                            paragraph.textContent = "网络环境出现问题, 状态检测无法工作"
+                        }
                     }
                 } else if (status === 1) {
                     paragraph.textContent = "实例停止中。";
@@ -50,7 +57,6 @@ paragraphs.forEach((paragraph) => {
                 } else {
                     console.error('错误：', error);
                     paragraph.textContent = `请求失败，请稍后再试。error:${error.message} data:${error.data}`;
-                    setTimeout(fetchData, 1000); // 1秒后重试
                 }
             });
     }
