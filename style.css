@@ -31,19 +31,16 @@ body {
 .nav {
     padding: 10px;
     text-align: center;
+    margin-bottom: 10px;
+    text-indent: auto;
 }
 
-.nav ul li {
-    background-color: #f0f0f0;
+.nav-left {
     padding: 10px;
+    text-align: left;
     margin-bottom: 10px;
 }
 
-.nav ol li {
-    background-color: #f0f0f0;
-    padding: 10px;
-    margin-bottom: 10px;
-}
 
 .content {
     padding: 20px;
@@ -122,4 +119,20 @@ iframe {
 
 body {
     background-color: cornsilk;
+}
+
+img{
+    max-width: 500px;
+    max-height: 300px;
+}
+
+ol{
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+    line-height: 20px;
+}
+
+ol h3{
+    font-weight:  bold;
 }
