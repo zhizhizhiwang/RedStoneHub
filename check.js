@@ -18,23 +18,33 @@ paragraphs.forEach((paragraph) => {
                 return response.json();
             })
             .then((data) => {
-                console.log('从服务器获取的数据:', data);
-
                 // 获取 data 对象中的 status 值
-                const code = data.code; 
+                const code = data.code;
                 // 根据 data.status 值更新对应段落的文本内容
                 if (code === 200) {
-                    paragraph.textContent = "实例正在运行中...";  
+                    paragraph.textContent = "实例正在运行中...";
                 } else {
-                    paragraph.textContent = data.username;  
+                    retryCount++;
+                    if (retryCount <= maxRetryCount) {
+                        console.log(`重试第 ${retryCount} 次`);
+                        fetchData();
+                    } else {
+                        paragraph.textContent = `请求失败，请稍后再试。error:${data.code} data:${data.username}`;
+                    }
                 }
             })
             .catch((error) => {
                 if (error.message.includes('Mixed Content')) {
                     console.error('错误：HTTPS 强制导致的错误');
                 } else {
-                    console.error('错误：', error);
-                    paragraph.textContent = `请求失败，请稍后再试。error:${error.code} data:${error.username}`;
+                    retryCount++;
+                    if (retryCount <= maxRetryCount) {
+                        console.log(`重试第 ${retryCount} 次`);
+                        fetchData();
+                    } else {
+                        console.error('错误：', error);
+                        paragraph.textContent = `请求失败，请稍后再试。error:${error.message}`;
+                    }
                 }
             });
     }
