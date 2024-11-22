@@ -35,6 +35,13 @@ body {
     text-indent: auto;
 }
 
+.list {
+    padding: 20px;
+    margin-bottom: 20px;
+    line-height: 30px;
+    
+}
+
 .nav-left {
     padding: 10px;
     text-align: left;
@@ -131,6 +138,10 @@ ol{
     text-align: left;
     margin-bottom: 20px;
     line-height: 20px;
+}
+
+.nav ul {
+    list-style-type:none;
 }
 
 ol h3{
