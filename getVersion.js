@@ -1,10 +1,10 @@
 // GitHub API URL
 const repoOwner = 'zhizhizhiwang';
 const repoName = 'RedStoneHub';
-const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/commits`;
+const VersionApiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/commits`;
 
 // 获取最后一次提交的哈希码
-fetch(apiUrl)
+fetch(VersionApiUrl)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -22,6 +22,8 @@ fetch(apiUrl)
         versionElements.forEach(element => {
             element.textContent = commitHash; 
         });
+
+        console.log(commitHash)
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);

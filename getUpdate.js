@@ -5,10 +5,10 @@ const repo = 'RedStoneHub';
 // 获取 span 元素和文件路径
 const spanElement = document.querySelector('span[data-file]');
 const filePath = spanElement.getAttribute('data-file');
-const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${filePath}`;
+const DateApiUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${filePath}`;
 
 // 获取文件的最后修改日期
-fetch(apiUrl)
+fetch(DateApiUrl)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
