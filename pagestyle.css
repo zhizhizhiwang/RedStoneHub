@@ -39,7 +39,7 @@ body {
 .list {
     padding: 20px;
     margin-bottom: 20px;
-    line-height: 30px;
+    line-height: 20px;
     
 }
 
@@ -109,10 +109,7 @@ body {
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
 }
-
-
 
 .element {
     overflow: hidden;
@@ -148,6 +145,7 @@ body {
 
 
 
+
 a {
     color: #00698f;
     text-decoration: none;
@@ -158,7 +156,7 @@ a {
 
 a:hover {
     color: #0088cc;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 a:link {
@@ -213,6 +211,7 @@ ol h3{
     display: flex; 
     flex-direction: column;
     text-decoration: none !important;
+    line-height: 1;
 }
 
 .block h3 {
@@ -221,4 +220,17 @@ ol h3{
 }
 .block p {
     color:  #333333;
+    padding: 5px;
+}
+
+.introduce {
+    display: flex; 
+    justify-content: row !important; 
+    padding: 10px;
+    margin: 20px 0;
+}
+
+.introduce img {
+    max-width: 300px;
+    max-height: 200px;
 }
