@@ -7,8 +7,8 @@ body {
 
 @font-face {
     font-family: 'Mojangles, uniFont';
-    src: url('Mojang-Regular.ttf') format('truetype'),
-        url('unifont-15.1.05.otf') format('openType');
+    src: url('font/Mojang-Regular.ttf') format('truetype'),
+        url('font/unifont-15.1.05.otf') format('openType');
 }
 
 .header {
