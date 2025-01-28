@@ -41,7 +41,6 @@ async def main():
         "0.0.0.0",
         8765,
         origins=None,  # 允许所有 Origin
-        server_header=None,  # 隐藏 Server 头
         process_request=None  # 完全禁用 Host 验证
     )
 
