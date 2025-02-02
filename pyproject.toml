@@ -1,0 +1,18 @@
+[project]
+name = "redstonehub"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "zhizhizhiwang",email = "1073171253@qq.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "websockets (>=14.2,<15.0)",
+    "networkx (>=3.4.2,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

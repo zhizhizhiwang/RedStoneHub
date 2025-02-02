@@ -1,2 +1,5 @@
 check.py
 *.md
+template.html
+footer.html
+/carnival/server

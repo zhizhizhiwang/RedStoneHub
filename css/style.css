@@ -7,8 +7,8 @@ body {
 
 @font-face {
     font-family: 'Mojangles, uniFont';
-    src: url('Mojang-Regular.ttf') format('truetype'),
-        url('unifont-15.1.05.otf') format('openType');
+    src: url('font/Mojang-Regular.ttf') format('truetype'),
+        url('font/unifont-15.1.05.otf') format('openType');
 }
 
 .header {
@@ -109,7 +109,10 @@ body {
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
+
+
 
 .element {
     overflow: hidden;
@@ -125,6 +128,22 @@ body {
     padding-right: 100px;
     padding-top: 10px;
     padding: 10px 10px;
+}
+
+.touchZoom {
+    width: auto;
+    height: auto;
+    background-color: #f4f4f4;
+    display: flex;
+    transition: transform 0.3s ease; /* 添加平滑过渡效果 */
+    border: 2px solid #333333;
+    border-radius: 10px;
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+
+.touchZoom:hover {
+    transform: scale(0.95); /* 鼠标悬停时放大 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -182,4 +201,24 @@ ol{
 
 ol h3{
     font-weight:  bold;
+}
+
+.block {
+    padding-top: 20px;
+    font-size: 18px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    display: flex; 
+    flex-direction: column;
+    text-decoration: none !important;
+}
+
+.block h3 {
+    color : #333333;
+    font-weight:900 ;
+}
+.block p {
+    color:  #333333;
 }
