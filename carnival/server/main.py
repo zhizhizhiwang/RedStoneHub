@@ -1,13 +1,14 @@
 import asyncio
 import websockets
 import json
-import networkx
 import logging
+import VisitedListManager
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.getLogger('websockets').setLevel(logging.INFO)
 
-graph = networkx.DiGraph()
-father = "start"
+
+name_list = VisitedListManager.VisitedListManager()
 
 
 def opt(message: str):
@@ -16,6 +17,7 @@ def opt(message: str):
         current_scene_json = message_json["currentScene"]
         current_scene_name = current_scene_json['sceneName'].replace('.txt', '')
         logging.debug(f"now scene is {current_scene_name}, stack is {message_json['sceneStack']}")
+        name_list.append(current_scene_name)
     except Exception as e:
         logging.debug("收到" + message)
 
@@ -26,7 +28,15 @@ async def echo(websocket):
         async for message in websocket:
             opt(message)
             status_code = 200
-            send_code = "pong" if message == "ping" else json.dumps({"status": status_code, "now_node": 0})
+
+            send_code = json.dumps({"status": status_code, "now_node": 0})
+            if message == "ping":
+                send_code = "pong"
+            elif message == "show":
+                name_list.show_graph()
+            elif message == "crash":
+                name_list.crash()
+
             await websocket.send(send_code)
     except websockets.exceptions.ConnectionClosed as e:
         logging.info(f"Connection closed: {e}")
@@ -38,7 +48,7 @@ async def main():
     # 正确配置服务器参数
     server = await websockets.serve(
         echo,
-        "0.0.0.0",
+        "localhost",
         8765,
         origins=None,  # 允许所有 Origin
         process_request=None  # 完全禁用 Host 验证
