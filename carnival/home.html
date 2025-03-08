@@ -1,3 +1,4 @@
+<!-- 如你所见 这是模板 -->
 <!DOCTYPE html>
 <html>
 
@@ -70,12 +71,16 @@
                     </div>
                 </ul>
 
-                <!-- 投票系统部分 -->
+                <!-- 替换原始按钮部分为投票系统 -->
                 <ul>
                     <div class="block">
                         <div class="vote-container">
                             <h2 id="voteQuestion">您希望下次活动在哪里举办？</h2>
-                            <div id="voteOptions"><!-- 动态生成选项 --></div>
+                            <div id="voteOptions">
+                                <div class="vote-option" onclick="castVote('A')">大礼堂</div>
+                                <div class="vote-option" onclick="castVote('B')">体育馆</div>
+                                <div class="vote-option" onclick="castVote('C')">操场</div>
+                            </div>
                             <div id="voteTimer">
                                 剩余时间: <span id="timer">05:00</span>
                             </div>
@@ -132,37 +137,8 @@
     <script>
         // 投票系统逻辑
         let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
+        let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
         let hasVoted = localStorage.getItem('hasVoted') === 'true';
-
-        // 初始化投票数据（兼容旧版）
-        let votes = (() => {
-            const stored = JSON.parse(localStorage.getItem('votes')) || { 
-                A: { label: "大礼堂", votes: 0 },
-                B: { label: "体育馆", votes: 0 },
-                C: { label: "操场", votes: 0 }
-            };
-            
-            // 数据迁移：旧数字格式 → 新对象格式
-            if (typeof stored.A === 'number') {
-                return {
-                    A: { label: "大礼堂", votes: stored.A },
-                    B: { label: "体育馆", votes: stored.B },
-                    C: { label: "操场", votes: stored.C }
-                };
-            }
-            return stored;
-        })();
-
-        // 动态生成投票选项
-        function initVoteOptions() {
-            const container = document.getElementById('voteOptions');
-            container.innerHTML = Object.entries(votes)
-                .map(([key, data]) => `
-                    <div class="vote-option" onclick="castVote('${key}')">
-                        ${data.label}
-                    </div>
-                `).join('');
-        }
 
         function updateTimer() {
             const now = Date.now();
@@ -181,9 +157,9 @@
 
         function castVote(option) {
             if (hasVoted) return alert('您已经投过票了！');
-            if (!votes[option]) return alert('无效选项！');
+            if (!confirm(`确认选择 ${option} 选项吗？`)) return;
             
-            votes[option].votes++;
+            votes[option]++;
             localStorage.setItem('votes', JSON.stringify(votes));
             localStorage.setItem('hasVoted', 'true');
             hasVoted = true;
@@ -195,14 +171,14 @@
             document.getElementById('voteTimer').style.display = 'none';
             document.getElementById('voteResults').style.display = 'block';
 
-            const total = Object.values(votes).reduce((sum, item) => sum + item.votes, 0);
+            const total = Object.values(votes).reduce((a, b) => a + b, 0);
             const container = document.getElementById('resultsContainer');
             container.innerHTML = '';
 
-            for (const [option, data] of Object.entries(votes)) {
-                const percent = total === 0 ? 0 : Math.round((data.votes / total) * 100);
+            for (const [option, count] of Object.entries(votes)) {
+                const percent = total === 0 ? 0 : Math.round((count / total) * 100);
                 container.innerHTML += `
-                    <div>${data.label}：${data.votes}票 (${percent}%)</div>
+                    <div>${option}选项：${count}票 (${percent}%)</div>
                     <div class="results-bar">
                         <div class="results-fill" style="width: ${percent}%"></div>
                     </div>
@@ -210,28 +186,19 @@
             }
         }
 
-        // 初始化
-        initVoteOptions();
+        // 初始化定时器
         setInterval(updateTimer, 1000);
         updateTimer();
         if (Date.now() > voteEndTime) showResults();
         if (hasVoted) document.getElementById('voteOptions').innerHTML = '<p>感谢您的参与！</p>';
 
-        // 管理员功能（全局暴露）
-        window.setNewVote = function(labels, duration) {
-            if (!Array.isArray(labels) || labels.length > 5) {
-                return alert('最多支持5个选项');
-            }
-
-            const newVotes = {};
-            labels.forEach((label, i) => {
-                const key = String.fromCharCode(65 + i); // A/B/C/D/E
-                newVotes[key] = { label, votes: 0 };
-            });
-
+        // 管理员功能
+        window.setNewVote = (options, duration) => {
             localStorage.clear();
-            localStorage.setItem('votes', JSON.stringify(newVotes));
-            localStorage.setItem('voteEndTime', Date.now() + duration * 60000);
+            votes = Object.fromEntries(options.map(opt => [opt, 0]));
+            voteEndTime = Date.now() + duration * 60000;
+            localStorage.setItem('votes', JSON.stringify(votes));
+            localStorage.setItem('voteEndTime', voteEndTime);
             location.reload();
         }
     </script>
