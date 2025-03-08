@@ -3,3 +3,5 @@ test.html
 /carnival/paper
 carnival/server/__pycache__/*
 *cache*/*
+carnival/server/__pycache__/VisitedListManager.cpython-312.pyc
+*/*.pyc
