@@ -1,3 +1,5 @@
 test.html
 .idea
 /carnival/paper
+carnival/server/__pycache__/*
+*cache*/*
