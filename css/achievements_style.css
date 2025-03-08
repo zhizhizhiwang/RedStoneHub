@@ -1,0 +1,51 @@
+/* 图片容器样式 */
+  .image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* 提示文字样式 */
+  .tooltip-text {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  /* 鼠标悬停效果 */
+  .image-container:hover .tooltip-text {
+    opacity: 1;
+  }
+  
+  /* 小箭头样式 */
+  .tooltip-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  }
+  
+  /* 图片基础样式 */
+  img {
+    display: block;
+    width: 300px;
+    height: auto;
+  }
+
+  
+  .custom-image {
+    width: 50%;   /* 相对于父容器的 50% */
+    max-width: 600px; /* 最大宽度限制 */
+    height: auto; /* 保持比例 */
+  }
