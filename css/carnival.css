@@ -1,0 +1,35 @@
+/* 新增投票样式 */
+.vote-container {
+    padding: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    margin: 10px;
+}
+.vote-option {
+    margin: 10px 0;
+    padding: 12px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.vote-option:hover {
+    background: rgba(0,0,0,0.5);
+}
+.results-bar {
+    height: 20px;
+    background: #555;
+    border-radius: 10px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+.results-fill {
+    height: 100%;
+    background: #00a1d6;
+    transition: width 0.5s;
+}
+#timer {
+    color: #ff9f43;
+    font-weight: bold;
+    font-size: 1.2em;
+}

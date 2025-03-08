@@ -6,42 +6,9 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="/css/pagestyle.css">
     <link rel="stylesheet" type="text/css" href="/css/bilibili-style.css">
+    <link rel="stylesheet" type="text/css" href="/css/carnival.css"
     <style>
-        /* 新增投票样式 */
-        .vote-container {
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            margin: 10px;
-        }
-        .vote-option {
-            margin: 10px 0;
-            padding: 12px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .vote-option:hover {
-            background: rgba(0,0,0,0.5);
-        }
-        .results-bar {
-            height: 20px;
-            background: #555;
-            border-radius: 10px;
-            margin: 5px 0;
-            overflow: hidden;
-        }
-        .results-fill {
-            height: 100%;
-            background: #00a1d6;
-            transition: width 0.5s;
-        }
-        #timer {
-            color: #ff9f43;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
+
     </style>
     <meta name="description" content="网页介绍, 给浏览器看的">
     <meta name="keywords" content="搜索关键词">
@@ -56,7 +23,6 @@
     <div class="container">
         <div class="content">
             <div class="nav list">
-                <!-- 直播区块保持不变 -->
                 <ul>
                     <div class="block">
                         <div class="bilibili-iframe" style="height: 100%;">
@@ -70,16 +36,18 @@
                         </div>
                     </div>
                 </ul>
-
-                <!-- 替换原始按钮部分为投票系统 -->
                 <ul>
                     <div class="block">
                         <div class="vote-container">
                             <h2 id="voteQuestion">您希望下次活动在哪里举办？</h2>
                             <div id="voteOptions">
+                                <!-- TODO: 在刷新投票之前, 必须把所有人的Voted都置为'null', 否则投不了票 -->
+                                <!-- 但是如果有人运气不好, 投票时Voted的值被修改, 但是错过了执行置'null'的时间(一轮投票结束后) 他的下一次投票就无法正常进行 -->
+                                <!-- 一种可行的解决方案是 Voted : {int : str} 以第几个选项(在所有选项中)为关键字, 每轮叠加, 不会重复, 避免读到历史状态的问题 -->
+                                <!-- 这个TODO怎么不会高亮 -->
                                 <div class="vote-option" onclick="castVote('A')">大礼堂</div>
                                 <div class="vote-option" onclick="castVote('B')">体育馆</div>
-                                <div class="vote-option" onclick="castVote('C')">操场</div>
+                                <div class="vote-option" onclick="castVote('P')">操场</div>
                             </div>
                             <div id="voteTimer">
                                 剩余时间: <span id="timer">05:00</span>
@@ -88,11 +56,11 @@
                                 <h3>投票结果</h3>
                                 <div id="resultsContainer"></div>
                             </div>
+                            <script src="/js/vote.js"></script>
                         </div>
                     </div>
                 </ul>
-
-                <!-- 文案区块保持不变 -->
+                
                 <ul>
                     <div class="block">
                         <div class="introduce">
@@ -120,8 +88,6 @@
                 </ul>
             </div>
         </div>
-
-        <!-- 侧边栏保持不变 -->
         <div class="sidebar">
             <p>维护者:zhizhizhiwang、Gcint、FuriousC</p>
             <p>最后修改日期:<span data-file="/carnival/home.html"></span></p>
@@ -133,77 +99,8 @@
         </div>
     </div>
 
-    <!-- 投票系统脚本 -->
-    <script>
-        // 投票系统逻辑
-        let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
-        let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
-        let hasVoted = localStorage.getItem('hasVoted') === 'true';
+    
 
-        function updateTimer() {
-            const now = Date.now();
-            const diff = voteEndTime - now;
-            
-            if (diff <= 0) {
-                showResults();
-                return;
-            }
-
-            const minutes = Math.floor(diff / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function castVote(option) {
-            if (hasVoted) return alert('您已经投过票了！');
-            if (!confirm(`确认选择 ${option} 选项吗？`)) return;
-            
-            votes[option]++;
-            localStorage.setItem('votes', JSON.stringify(votes));
-            localStorage.setItem('hasVoted', 'true');
-            hasVoted = true;
-            alert('投票成功！');
-        }
-
-        function showResults() {
-            document.getElementById('voteOptions').style.display = 'none';
-            document.getElementById('voteTimer').style.display = 'none';
-            document.getElementById('voteResults').style.display = 'block';
-
-            const total = Object.values(votes).reduce((a, b) => a + b, 0);
-            const container = document.getElementById('resultsContainer');
-            container.innerHTML = '';
-
-            for (const [option, count] of Object.entries(votes)) {
-                const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-                container.innerHTML += `
-                    <div>${option}选项：${count}票 (${percent}%)</div>
-                    <div class="results-bar">
-                        <div class="results-fill" style="width: ${percent}%"></div>
-                    </div>
-                `;
-            }
-        }
-
-        // 初始化定时器
-        setInterval(updateTimer, 1000);
-        updateTimer();
-        if (Date.now() > voteEndTime) showResults();
-        if (hasVoted) document.getElementById('voteOptions').innerHTML = '<p>感谢您的参与！</p>';
-
-        // 管理员功能
-        window.setNewVote = (options, duration) => {
-            localStorage.clear();
-            votes = Object.fromEntries(options.map(opt => [opt, 0]));
-            voteEndTime = Date.now() + duration * 60000;
-            localStorage.setItem('votes', JSON.stringify(votes));
-            localStorage.setItem('voteEndTime', voteEndTime);
-            location.reload();
-        }
-    </script>
-
-    <!-- 页脚保持不变 -->
     <div class="footer copyleft" id="footer">
         <p>本作品采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。</p>
         <p>
