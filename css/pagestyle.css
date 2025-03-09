@@ -143,9 +143,6 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
-
-
-
 a {
     color: #00698f;
     text-decoration: none;
@@ -202,9 +199,9 @@ ol h3{
 }
 
 .block {
-    padding-top: 20px;
+    padding-top: 2rem;
     font-size: 18px;
-    padding: 20px;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: left;
@@ -212,6 +209,8 @@ ol h3{
     flex-direction: column;
     text-decoration: none !important;
     line-height: 1;
+    border: 1px solid #000;
+    
 }
 
 .block h3 {
@@ -226,11 +225,15 @@ ol h3{
 .introduce {
     display: flex; 
     justify-content: row !important; 
-    padding: 10px;
-    margin: 20px 0;
+    margin: 0%;
+    border-top: 0;
+    padding: 0, 0, 0, 0;
 }
 
 .introduce img {
-    max-width: 300px;
+    max-width: 200px;
     max-height: 200px;
+    margin: 0%;
+    border-top: 0;
+    padding: 0, 0, 0, 0;
 }
