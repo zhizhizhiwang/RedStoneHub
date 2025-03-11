@@ -3,6 +3,13 @@ let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
 let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
 let Voted = localStorage.getItem('Voted');
 
+if Voted === null {
+	VOted = 'null';
+	localStorage.setItem('Voted', 'null');
+}
+
+
+
 function updateTimer() {
     const now = Date.now();
     const diff = voteEndTime - now;
@@ -57,12 +64,3 @@ updateTimer();
 if (Date.now() > voteEndTime) showResults();
 if (Voted !== 'null') document.getElementById('voteOptions').innerHTML = `<p>感谢您的参与！${option} </p>`;
 
-// 管理员功能
-window.setNewVote = (options, duration) => {
-    localStorage.clear();
-    votes = Object.fromEntries(options.map(opt => [opt, 0]));
-    voteEndTime = Date.now() + duration * 60000;
-    localStorage.setItem('votes', JSON.stringify(votes));
-    localStorage.setItem('voteEndTime', voteEndTime);
-    location.reload();
-}
