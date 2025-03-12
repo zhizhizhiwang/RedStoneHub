@@ -6,10 +6,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="/css/pagestyle.css">
     <link rel="stylesheet" type="text/css" href="/css/bilibili-style.css">
-    <link rel="stylesheet" type="text/css" href="/css/carnival.css"
-    <style>
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/carnival.css">
     <meta name="description" content="网页介绍, 给浏览器看的">
     <meta name="keywords" content="七宝中学狂欢节 七宝中学 狂欢节">
     <meta name="author" content="zhizhizhiwang">
@@ -55,6 +52,24 @@
                             <div id="voteResults" style="display:none;">
                                 <h3>投票结果</h3>
                                 <div id="resultsContainer"></div>
+                            </div>
+                            <div class="introduce">
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    required
+                                    minlength="2"
+                                    maxlength="10"
+                                    size="10" 
+                                    placeholder="姓名简拼"
+                                />
+                                <input
+                                type="number"
+                                id="id"
+                                name="id"
+                                placeholder="学号"
+                                />
                             </div>
                             <script src="/js/vote.js"></script>
                         </div>
