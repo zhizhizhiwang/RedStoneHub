@@ -2,7 +2,8 @@
 let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
 let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
 let Voted = localStorage.getItem('Voted');
-let socket = WebSocket();
+let socket = WebSocket("url");
+
 
 if (Voted === null) {
 	Voted = 'null';
