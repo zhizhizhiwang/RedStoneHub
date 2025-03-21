@@ -66,7 +66,7 @@ function showVerificationModal() {
     document.getElementById('verification-modal').style.display = 'block';
     
     // 初始化 Turnstile（如果尚未初始化）
-    if (!turnstileWidget) {
+    if (turnstileWidget === undefined) {
         turnstileWidget = turnstile.render('#turnstile-container', {
             sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
             callback: onVerificationSuccess,
