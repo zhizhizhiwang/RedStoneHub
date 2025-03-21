@@ -72,7 +72,12 @@
                                 placeholder="学号"
                                 />
 
-                                <div class="cf-turnstile" data-sitekey="0x4AAAAAABB8DtuMaJAujGLA" data-callback="javascriptCallback">1</div>
+                                <div id="turnstile-widget" 
+                                class="cf-turnstile" 
+                                data-sitekey="0x4AAAAAABB8DtuMaJAujGLA"
+                                data-callback="onSuccess"
+                                data-error-callback="onError"
+                                data-expired-callback="onExpired"></div>
 
                             </div>
                             <div id="voteTimer">

@@ -1,3 +1,23 @@
+const form = document.getElementById('demo-form');
+let token = null;
+
+// Turnstile 回调函数
+window.onSuccess = function(token) {
+    console.log('验证成功，Token:', token);
+    window.token = token;
+};
+
+window.onError = function() {
+    console.error('验证发生错误');
+    window.token = null;
+};
+
+window.onExpired = function() {
+    console.warn('验证已过期');
+    window.token = null;
+};
+
+
 // 投票系统逻辑
 let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
 let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
@@ -25,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function update_item() {
-    
+
 }
 
 
@@ -43,6 +63,44 @@ function updateTimer() {
     document.getElementById('timer').textContent = 
         `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
+
+async function verify(e) {
+    e.preventDefault();
+            
+    if (!window.token) {
+        alert('请先完成人机验证');
+        return;
+    }
+
+    const formData = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+        cf_turnstile_token: window.token
+    };
+
+    try {
+        const response = await fetch('/verify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('验证成功！');
+            // 这里可以添加登录成功后的跳转逻辑
+        } else {
+            alert(`验证失败：${result.error}`);
+            window.turnstile.reset(); // 重置验证组件
+        }
+    } catch (error) {
+        console.error('请求失败:', error);
+        alert('服务器通信失败');
+    }
+};
 
 function castVote(option) {
     if (Voted !== 'null') return alert('您已经投过票了！');
