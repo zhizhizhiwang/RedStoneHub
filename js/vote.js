@@ -75,8 +75,6 @@ async function sendVote(voteType, Hash) {
     
     if (window.token === null) return alert("人机验证未通过");
 
-
-
     const formData = {
         key: voteType.toString(),
         hash: hash.toString(),
