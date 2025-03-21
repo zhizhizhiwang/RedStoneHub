@@ -108,22 +108,10 @@ async function sendVote(voteType, Hash) {
 
 async function castVote(Vote) {
     sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
-    .then(hash => hash = hash)
+    .then(h => hash = h)
     vote = Vote;
 
     sendVote(vote, hash);
-
-    turnstileWidget = turnstile.render('#turnstile-container', {
-        sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
-        callback: onVerificationSuccess,
-        'error-callback': onVerificationError,
-        'expired-callback': () => {
-            console.log('验证过期，请重新验证');
-            turnstileWidget.reset();
-        }
-    });    
-    
-    turnstileWidget.reset();
 }
 
 function showResults() {
