@@ -106,23 +106,21 @@ async function sendVote(voteType, Hash) {
     }
 };
 
-function castVote(Vote) {
-    hash = sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString());
+async function castVote(Vote) {
+    hash = await sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString());
     vote = Vote;
 
     sendVote(vote, hash);
 
-    if (turnstileWidget === undefined) {
-        turnstileWidget = turnstile.render('#turnstile-container', {
-            sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
-            callback: onVerificationSuccess,
-            'error-callback': onVerificationError,
-            'expired-callback': () => {
-                console.log('验证过期，请重新验证');
-                turnstileWidget.reset();
-            }
-        });
-    }
+    turnstileWidget = turnstile.render('#turnstile-container', {
+        sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
+        callback: onVerificationSuccess,
+        'error-callback': onVerificationError,
+        'expired-callback': () => {
+            console.log('验证过期，请重新验证');
+            turnstileWidget.reset();
+        }
+    });    
     
     turnstileWidget.reset();
 }
