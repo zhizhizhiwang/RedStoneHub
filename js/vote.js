@@ -78,9 +78,9 @@ async function sendVote(voteType, Hash) {
 
 
     const formData = {
-        key: voteType,
-        hash: Hash,
-        cf_turnstile_token: window.token
+        key: voteType.toString(),
+        hash: hash.toString(),
+        cf_turnstile_token: window.token.toString()
     };
 
     try {
