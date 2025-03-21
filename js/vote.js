@@ -107,7 +107,8 @@ async function sendVote(voteType, Hash) {
 };
 
 async function castVote(Vote) {
-    hash = await sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString());
+    sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
+    .then(hash => hash = hash)
     vote = Vote;
 
     sendVote(vote, hash);
