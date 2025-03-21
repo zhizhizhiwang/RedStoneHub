@@ -1,6 +1,8 @@
 const form = document.getElementById('demo-form');
 let hash = null;
 let vote = null;
+let token = null;
+window.token = null;
 
 async function sha256(message) {
     // 将字符串转换为 ArrayBuffer
@@ -45,7 +47,6 @@ function update_item() {
 }
 
 
-
 function updateTimer() {
     const now = Date.now();
     const diff = voteEndTime - now;
@@ -61,52 +62,29 @@ function updateTimer() {
         `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-function showVerificationModal() {
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById('verification-modal').style.display = 'block';
-    
-    // 初始化 Turnstile（如果尚未初始化）
-    if (turnstileWidget === undefined) {
-        turnstileWidget = turnstile.render('#turnstile-container', {
-            sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
-            callback: onVerificationSuccess,
-            'error-callback': onVerificationError,
-            'expired-callback': () => {
-                console.log('验证过期，请重新验证');
-                turnstileWidget.reset();
-            }
-        });
-    } else {
-        turnstileWidget.reset();
-    }
-}
-
 function onVerificationSuccess(token) {
-    hideVerificationModal();
-    sendVote(token, vote, hash);
+    window.token = token;
 }
 
 function onVerificationError() {
-    console.error('验证失败');
-    turnstileWidget.reset();
+    window.token = null;
+    console.error('投票失败');
 }
 
-// 隐藏模态框
-function hideVerificationModal() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('verification-modal').style.display = 'none';
-}
+async function sendVote(voteType, Hash) {
+    
+    if (window.token === null) return alert("人机验证未通过");
 
-async function sendVote(token, voteType, Hash) {
-            
+
+
     const formData = {
         key: voteType,
         hash: Hash,
-        cf_turnstile_token: token
+        cf_turnstile_token: window.token
     };
 
     try {
-        const response = await fetch('/verify', {
+        const response = await fetch('https://home.zhizhiwang.top/verify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -131,7 +109,22 @@ async function sendVote(token, voteType, Hash) {
 function castVote(Vote) {
     hash = sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString());
     vote = Vote;
-    showVerificationModal();
+
+    sendVote(vote, hash);
+
+    if (turnstileWidget === undefined) {
+        turnstileWidget = turnstile.render('#turnstile-container', {
+            sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
+            callback: onVerificationSuccess,
+            'error-callback': onVerificationError,
+            'expired-callback': () => {
+                console.log('验证过期，请重新验证');
+                turnstileWidget.reset();
+            }
+        });
+    }
+    
+    turnstileWidget.reset();
 }
 
 function showResults() {

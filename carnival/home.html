@@ -47,7 +47,7 @@
                                 <!-- 这个TODO怎么不会高亮 -->
                                 <div class="vote-option" onclick="castVote('A')">大礼堂</div>
                                 <div class="vote-option" onclick="castVote('B')">体育馆</div>
-                                <div class="vote-option" onclick="castVote('C')">操场</div>
+                                <div class="vote-option" onclick="castVote('P')">操场</div>
                             </div>
                             
                             <div id="voteResults" style="display:none;">
@@ -71,15 +71,12 @@
                                 name="id"
                                 placeholder="学号:260000"
                                 />
-
-                                <div class="overlay" id="overlay"></div>
-                                <div id="verification-modal">
-                                    <div id="turnstile-container" 
-                                        class="cf-turnstile"
-                                        data-sitekey="0x4AAAAAABB8DtuMaJAujGLA"
-                                        data-callback="onVerificationSuccess"
-                                        data-error-callback="onVerificationError"></div>
-                                </div>
+                                
+                                <div id="turnstile-container" 
+                                class="cf-turnstile" 
+                                data-sitekey="0x4AAAAAABB8DtuMaJAujGLA"
+                                data-callback="onVerificationSuccess"
+                                data-error-callback="onVerificationError"
 
                             </div>
                             <div id="voteTimer">
