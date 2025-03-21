@@ -2,13 +2,32 @@
 let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
 let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
 let Voted = localStorage.getItem('Voted');
-let socket = WebSocket("url");
-
 
 if (Voted === null) {
 	Voted = 'null';
 	localStorage.setItem('Voted', 'null');
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("页面初始化开始");
+    fetch("https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/now-version")
+    .then(response => response.text())
+    .then(data => {
+        console.log("web version: " + data);
+        if ( Cookies === undefined ) {
+            console.error("jscookie未加载!");
+        } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data)) {
+            console.log("当前version: " + Cookies.get('version') + " 开始同步");
+            update_item();
+        }
+        
+    })
+});
+
+function update_item() {
+    
+}
+
 
 function updateTimer() {
     const now = Date.now();
