@@ -1,22 +1,19 @@
 const form = document.getElementById('demo-form');
-let token = null;
+let hash = null;
+let vote = null;
 
-// Turnstile 回调函数
-window.onSuccess = function(token) {
-    console.log('验证成功，Token:', token);
-    window.token = token;
-};
+async function sha256(message) {
+    // 将字符串转换为 ArrayBuffer
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
 
-window.onError = function() {
-    console.error('验证发生错误');
-    window.token = null;
-};
+    // 使用 Web Crypto API
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 
-window.onExpired = function() {
-    console.warn('验证已过期');
-    window.token = null;
-};
-
+    // 将 ArrayBuffer 转换为十六进制字符串
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 // 投票系统逻辑
 let voteEndTime = localStorage.getItem('voteEndTime') || (Date.now() + 300000);
@@ -40,13 +37,13 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("当前version: " + Cookies.get('version') + " 开始同步");
             update_item();
         }
-        
     })
 });
 
 function update_item() {
 
 }
+
 
 
 function updateTimer() {
@@ -64,18 +61,48 @@ function updateTimer() {
         `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-async function verify(e) {
-    e.preventDefault();
-            
-    if (!window.token) {
-        alert('请先完成人机验证');
-        return;
+function showVerificationModal() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('verification-modal').style.display = 'block';
+    
+    // 初始化 Turnstile（如果尚未初始化）
+    if (!turnstileWidget) {
+        turnstileWidget = turnstile.render('#turnstile-container', {
+            sitekey: '0x4AAAAAABB8DtuMaJAujGLA',
+            callback: onVerificationSuccess,
+            'error-callback': onVerificationError,
+            'expired-callback': () => {
+                console.log('验证过期，请重新验证');
+                turnstileWidget.reset();
+            }
+        });
+    } else {
+        turnstileWidget.reset();
     }
+}
 
+function onVerificationSuccess(token) {
+    hideVerificationModal();
+    sendVote(token, vote, hash);
+}
+
+function onVerificationError() {
+    console.error('验证失败');
+    turnstileWidget.reset();
+}
+
+// 隐藏模态框
+function hideVerificationModal() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('verification-modal').style.display = 'none';
+}
+
+async function sendVote(token, voteType, Hash) {
+            
     const formData = {
-        username: document.getElementById('username').value,
-        password: document.getElementById('password').value,
-        cf_turnstile_token: window.token
+        key: voteType,
+        hash: Hash,
+        cf_turnstile_token: token
     };
 
     try {
@@ -90,10 +117,9 @@ async function verify(e) {
         const result = await response.json();
         
         if (result.success) {
-            alert('验证成功！');
-            // 这里可以添加登录成功后的跳转逻辑
+            alert('投票成功！');
         } else {
-            alert(`验证失败：${result.error}`);
+            alert(`投票失败：${result.error}`);
             window.turnstile.reset(); // 重置验证组件
         }
     } catch (error) {
@@ -102,17 +128,10 @@ async function verify(e) {
     }
 };
 
-function castVote(option) {
-    if (Voted !== 'null') return alert('您已经投过票了！');
-    if (!confirm(`确认选择 ${option} 选项吗？`)) return;
-    
-    if(votes[option] !== undefined) votes[option]++;
-    else votes[option] = 1
-
-    localStorage.setItem('votes', JSON.stringify(votes));
-    localStorage.setItem('Voted', option);
-    Voted = option;
-    alert('投票成功！');
+function castVote(Vote) {
+    hash = sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString());
+    vote = Vote;
+    showVerificationModal();
 }
 
 function showResults() {
