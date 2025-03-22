@@ -4,6 +4,9 @@ let vote = null;
 let token = null;
 window.token = null;
 
+// let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
+let domain = `https://raw.githubusercontent.com/zhizhizhiwang/carnival-pub/refs/heads/main/`
+
 async function sha256(message) {
     // 将字符串转换为 ArrayBuffer
     const encoder = new TextEncoder();
@@ -29,20 +32,60 @@ if (Voted === null) {
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log("页面初始化开始");
-    fetch("https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/now-version")
+    fetch(`${domain}now-version`)
+    .then(response => response.text())
+    .then(data => {
+        console.log("web version: " + data);
+        update_item(data);
+    })
+
+    setInterval(upgrade, 1 * 60 * 1000);
+});
+
+async function upgrade() {
+    fetch(`${domain}now-version`)
     .then(response => response.text())
     .then(data => {
         console.log("web version: " + data);
         if ( Cookies === undefined ) {
             console.error("jscookie未加载!");
+            update_item(data);
         } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data)) {
             console.log("当前version: " + Cookies.get('version') + " 开始同步");
-            update_item();
+            update_item(data);
         }
     })
-});
+}
 
-function update_item() {
+
+async function get_content(version) {
+    try {
+        const response = await fetch(`${domain}${version}.json`);
+        return await response.json();
+    } catch (error) {
+        console.error(`与服务器通信不畅: ${error}`);
+    }
+}
+
+async function update_item(version) {
+    const title = document.getElementById('voteQuestion');
+    const opts = document.getElementById('voteOptions');
+    title.innerText = "waiting";
+    opts.innerHTML = "waiting";
+    try {
+        const data = await get_content(version.toString());
+        title.innerText = data['title'];
+        const options = data['options'];
+        opts.innerHTML = options.map(opt => `
+            <div class="vote-option" onclick="castVote('${opt['value']}')">
+                ${opt['label']}
+            </div>
+        `).join("");
+    
+    Cookies.set("version", )
+    } catch (error) {
+        console.error('获取数据失败:', error);
+    }
 
 }
 
@@ -132,9 +175,6 @@ function showResults() {
     }
 }
 
-// 初始化定时器
-setInterval(updateTimer, 1000);
-updateTimer();
 if (Date.now() > voteEndTime) showResults();
 if (Voted !== 'null') document.getElementById('voteOptions').innerHTML = `<p>感谢您的参与！${option} </p>`;
 
