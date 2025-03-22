@@ -39,15 +39,15 @@
                 <ul>
                     <div class="block">
                         <div class="vote-container">
-                            <h2 id="voteQuestion">您希望下次活动在哪里举办？</h2>
+                            <h2 id="voteQuestion">你想参加我们的狂欢节活动吗？</h2>
                             <div id="voteOptions">
                                 <!-- TODO: 在刷新投票之前, 必须把所有人的Voted都置为'null', 否则投不了票 -->
                                 <!-- 但是如果有人运气不好, 投票时Voted的值被修改, 但是错过了执行置'null'的时间(一轮投票结束后) 他的下一次投票就无法正常进行 -->
                                 <!-- 一种可行的解决方案是 Voted : {int : str} 以第几个选项(在所有选项中)为关键字, 每轮叠加, 不会重复, 避免读到历史状态的问题 -->
                                 <!-- 这个TODO怎么不会高亮 -->
-                                <div class="vote-option" onclick="castVote('A')">大礼堂</div>
-                                <div class="vote-option" onclick="castVote('B')">体育馆</div>
-                                <div class="vote-option" onclick="castVote('P')">操场</div>
+                                <div class="vote-option" onclick="castVote('A')">想</div>
+                                <div class="vote-option" onclick="castVote('B')">想</div>
+                                <div class="vote-option" onclick="castVote('P')">想</div>
                             </div>
                             
                             <div id="voteResults" style="display:none;">
