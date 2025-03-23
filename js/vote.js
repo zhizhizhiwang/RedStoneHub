@@ -5,7 +5,7 @@ let token = null;
 window.token = null;
 
 // let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
-let domain = `https://github.cmliussss.net/https://raw.githubusercontent.com/zhizhizhiwang/carnival-pub/refs/heads/main/`
+let domain = `https://raw.qbvisualnovel.top/zhizhizhiwang/carnival-pub/main/`
 
 async function sha256(message) {
     // 将字符串转换为 ArrayBuffer
@@ -60,7 +60,7 @@ async function upgrade() {
 
 async function get_content(version) {
     try {
-        const response = await fetch(`${domain}${version}.json`);
+        const response = await fetch(`${domain}${version}.json?token=password`);
         return await response.json();
     } catch (error) {
         console.error(`与服务器通信不畅: ${error}`);
