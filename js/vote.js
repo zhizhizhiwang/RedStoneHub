@@ -125,7 +125,7 @@ async function sendVote(voteType, Hash) {
     };
 
     try {
-        const response = await fetch('verify', {
+        const response = await fetch('/verify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
