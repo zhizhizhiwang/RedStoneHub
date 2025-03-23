@@ -32,7 +32,7 @@ if (Voted === null) {
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log("页面初始化开始");
-    fetch(`${domain}now-version`)
+    fetch(`${domain}now-version?token=password`)
     .then(response => response.text())
     .then(data => {
         console.log("web version: " + data);
