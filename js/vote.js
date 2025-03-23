@@ -5,7 +5,7 @@ let token = null;
 window.token = null;
 
 // let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
-let domain = `https://raw.githubusercontent.com/zhizhizhiwang/carnival-pub/refs/heads/main/`
+let domain = `https://gh-proxy.net/https://raw.githubusercontent.com/zhizhizhiwang/carnival-pub/refs/heads/main/`
 
 async function sha256(message) {
     // 将字符串转换为 ArrayBuffer
@@ -125,7 +125,7 @@ async function sendVote(voteType, Hash) {
     };
 
     try {
-        const response = await fetch('https://home.zhizhiwang.top/verify', {
+        const response = await fetch('verify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
