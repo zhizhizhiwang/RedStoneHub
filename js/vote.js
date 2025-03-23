@@ -120,7 +120,7 @@ async function sendVote(voteType, Hash) {
 
     const formData = {
         key: voteType.toString(),
-        hash: hash.toString(),
+        hash: Hash.toString(),
         cf_turnstile_token: window.token.toString()
     };
 
@@ -148,7 +148,7 @@ async function sendVote(voteType, Hash) {
 };
 
 async function castVote(Vote) {
-    sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
+    await sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
     .then(h => hash = h)
     vote = Vote;
 
