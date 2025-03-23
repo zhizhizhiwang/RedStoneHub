@@ -143,7 +143,7 @@ async function sendVote(voteType, Hash) {
         }
     } catch (error) {
         console.error('请求失败:', error);
-        alert('服务器通信失败');
+        alert(`服务器通信失败${error.message}:${error}`);
     }
 };
 
