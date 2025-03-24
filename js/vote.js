@@ -3,6 +3,7 @@ let hash = null;
 let vote = null;
 let token = null;
 window.token = null;
+let showResult = false;
 
 // let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
 let domain = `https://raw.qbvisualnovel.top/zhizhizhiwang/carnival-pub/main/`
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch(`${domain}now-version?token=password`)
     .then(response => response.text())
     .then(data => {
-        console.log("web version: " + data);
+        console.log("now version: " + data);
         update_item(data);
     })
 
@@ -45,14 +46,22 @@ document.addEventListener("DOMContentLoaded", function() {
 async function upgrade() {
     fetch(`${domain}now-version`)
     .then(response => response.text())
+    .then(data => data.split(':'))
     .then(data => {
-        console.log("web version: " + data);
+        console.log("web version: " + data[0]);
         if ( Cookies === undefined ) {
             console.error("jscookie未加载!");
-            update_item(data);
-        } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data)) {
+            update_item(data[0]);
+        } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
             console.log("当前version: " + Cookies.get('version') + " 开始同步");
-            update_item(data);
+            update_item(data[0]);
+        }
+
+        if(data[1] === 'result')
+        {
+            window.showResult = true;
+        }else{
+            window.showResult = false;
         }
     })
 }
@@ -64,6 +73,7 @@ async function get_content(version) {
         return await response.json();
     } catch (error) {
         console.error(`与服务器通信不畅: ${error}`);
+        alert("无法获取选项内容, 请尝试刷新");
     }
 }
 
@@ -75,12 +85,18 @@ async function update_item(version) {
     try {
         const data = await get_content(version.toString());
         title.innerText = data['title'];
-        const options = data['options'];
-        opts.innerHTML = options.map(opt => `
-            <div class="vote-option" onclick="castVote('${opt['value']}')">
-                ${opt['label']}
-            </div>
-        `).join("");
+        
+        if (! window.showResult){
+            const options = data['options'];
+            opts.innerHTML = options.map(opt => `
+                <div class="vote-option" onclick="castVote('${opt['value']}')">
+                    ${opt['label']}
+                </div>
+            `).join("");
+        }else{
+            opts.innerHTML = '';
+            showResults(options);
+        }
     
     Cookies.set("version", )
     } catch (error) {
@@ -110,7 +126,7 @@ function onVerificationSuccess(token) {
 }
 
 function onVerificationError() {
-    window.token = null;
+    window.token = '';
     console.error('投票失败');
 }
 
@@ -154,8 +170,16 @@ async function castVote(Vote) {
     sendVote(vote, hash);
 }
 
-async function fetchVote() {
-    
+async function queryVote(Votes) {
+    returnData = [];
+    for(const [Vote, ] of Object.entries(Votes)){
+        await fetch(`https://carnival.qbvisualnovel.top/vote_worker/QUERY?key=${Vote}`)
+        .then(response => response.json())
+        .then(data => {
+            returnData.push(data["results"][0]);
+        });
+    }
+    return returnData;
 }
 
 function showResults() {
