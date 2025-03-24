@@ -151,13 +151,14 @@ async function castVote(Vote) {
     await sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
     .then(h => hash = h)
     vote = Vote;
-
     sendVote(vote, hash);
 }
 
+async function fetchVote() {
+    
+}
+
 function showResults() {
-    document.getElementById('voteOptions').style.display = 'none';
-    document.getElementById('voteTimer').style.display = 'none';
     document.getElementById('voteResults').style.display = 'block';
 
     const total = Object.values(votes).reduce((a, b) => a + b, 0);
