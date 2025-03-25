@@ -4,6 +4,7 @@ let vote = null;
 let token = null;
 window.token = null;
 let showResult = false;
+let version = -1;
 
 // let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
 let domain = `https://raw.qbvisualnovel.top/zhizhizhiwang/carnival-pub/main/`
@@ -35,9 +36,19 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("页面初始化开始");
     fetch(`${domain}now-version?token=password`)
     .then(response => response.text())
+    .then(data => data.split(':'))
     .then(data => {
-        console.log("now version: " + data);
-        update_item(data);
+        console.log("now version: " + data[0]);
+        version = data[0];
+        Cookies.set('version', data[0])
+        update_item(data[0]);
+
+        if(data[1] === 'result')
+        {
+            window.showResult = true;
+        }else{
+            window.showResult = false;
+        }
     })
 
     setInterval(upgrade, 1 * 60 * 1000);
@@ -51,9 +62,11 @@ async function upgrade() {
         console.log("web version: " + data[0]);
         if ( Cookies === undefined ) {
             console.error("jscookie未加载!");
+            version = data[0];
             update_item(data[0]);
         } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
             console.log("当前version: " + Cookies.get('version') + " 开始同步");
+            version = data[0];
             update_item(data[0]);
         }
 
@@ -126,7 +139,7 @@ function onVerificationSuccess(token) {
 }
 
 function onVerificationError() {
-    window.token = '';
+    window.token = null;
     console.error('投票失败');
 }
 
@@ -153,6 +166,7 @@ async function sendVote(voteType, Hash) {
         
         if (result.success) {
             alert('投票成功！');
+            window.turnstile.reset();
         } else {
             alert(`投票失败：${result.error}`);
             window.turnstile.reset(); // 重置验证组件
@@ -164,39 +178,64 @@ async function sendVote(voteType, Hash) {
 };
 
 async function castVote(Vote) {
-    await sha256(document.getElementById('name').value.toString() + document.getElementById('id').value.toString())
-    .then(h => hash = h)
+    hash = document.getElementById('id').value.toString();
     vote = Vote;
     sendVote(vote, hash);
 }
 
 async function queryVote(Votes) {
-    returnData = [];
-    for(const [Vote, ] of Object.entries(Votes)){
-        await fetch(`https://carnival.qbvisualnovel.top/vote_worker/QUERY?key=${Vote}`)
-        .then(response => response.json())
-        .then(data => {
-            returnData.push(data["results"][0]);
-        });
+    let returnData = [];
+    const url = Votes.map(V => V['value']).join('|');
+
+    const response = await fetch(`https://carnival.qbvisualnovel.top/vote_worker/QUERY?key=${url}`);
+    const data = await response.json();
+
+    // 验证响应结构
+    if (!data?.success || !Array.isArray(data.results)) {
+        throw new Error('Invalid API response');
     }
-    return returnData;
+
+    // 直接返回 results 数组（格式：[{ name: "...", value: ... }, ...]）
+    return data.results;
 }
 
-function showResults() {
+async function showResults() {
     document.getElementById('voteResults').style.display = 'block';
 
-    const total = Object.values(votes).reduce((a, b) => a + b, 0);
-    const container = document.getElementById('resultsContainer');
-    container.innerHTML = '';
+    try {
+        // 使用 await 替代 .then 链
+        const response = await fetch(`${domain}${version}.json?token=password`);
+        const data = await response.json();
+        const options = data.options;
 
-    for (const [option, count] of Object.entries(votes)) {
-        const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-        container.innerHTML += `
-            <div>${option}选项：${count}票 (${percent}%)</div>
-            <div class="results-bar">
-                <div class="results-fill" style="width: ${percent}%"></div>
-            </div>
-        `;
+        // 获取投票数据
+        const items = await queryVote(options);
+        console.log(items);
+        // 计算总票数 (使用 reduce)
+        const total = items.reduce((sum, item) => sum + parseInt(item['value']), 0);
+        console.log(total);
+        // 构建结果 HTML
+        const container = document.getElementById('resultsContainer');
+        let htmlContent = '';
+
+        // 遍历数组而非对象 (假设 items 是对象数组)
+        items.forEach(item => {
+            const percent = total === 0 ? 0 : Math.round((item['value'] / total) * 100);
+            htmlContent += `
+                <div>${item['name']}选项：${item['value']}票 (${percent}%)</div>
+                <div class="results-bar">
+                    <div class="results-fill" style="width: ${percent}%"></div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = htmlContent;
+
+    } catch (error) {
+        console.error('Error fetching results:', error);
+        // 可以添加错误提示到页面
+        document.getElementById('resultsContainer').innerHTML = 
+            `<div class="error">获取结果失败，请刷新重试</div>`;
     }
 }
 
