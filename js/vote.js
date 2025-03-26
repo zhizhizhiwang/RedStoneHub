@@ -3,7 +3,6 @@ let hash = null;
 let vote = null;
 let token = null;
 window.token = null;
-let showResult = false;
 let version = -1;
 
 // let domain = 'https://raw.zhizhiwang.top/zhizhizhiwang/carnival-pub/refs/heads/main/'
@@ -43,11 +42,15 @@ document.addEventListener("DOMContentLoaded", function() {
         update_item(data[0]);
 
         if(data[1] === 'result')
-        {
-            window.showResult = true;
-        }else{
-            window.showResult = false;
-        }
+            {
+                window.mode = 'show'; //只展示结果
+                showResults();
+            }else if(data[1] === 'both'){
+                window.mode = 'both'; //都展示
+                showResults();
+            }else{
+                window.mode = 'vote'; //只展示选项
+            }
     })
 
     setInterval(upgrade, 1 * 60 * 1000);
@@ -71,9 +74,13 @@ async function upgrade() {
 
         if(data[1] === 'result')
         {
-            window.showResult = true;
+            window.mode = 'show'; //只展示结果
+            showResults();
+        }else if(data[1] === 'both'){
+            window.mode = 'both'; //都展示
+            showResults();
         }else{
-            window.showResult = false;
+            window.mode = 'vote'; //只展示选项
         }
     })
 }
@@ -98,19 +105,22 @@ async function update_item(version) {
         const data = await get_content(version.toString());
         title.innerText = data['title'];
         
-        if (! window.showResult){
+        if (window.mode !== 'show') {
             const options = data['options'];
             opts.innerHTML = options.map(opt => `
                 <div class="vote-option" onclick="castVote('${opt['value']}')">
                     ${opt['label']}
                 </div>
             `).join("");
+            console.log(opts.innerHTML);
+            console.log("选项已更新");
         }else{
-            opts.innerHTML = '';
-            showResults(options);
+            if(window.mode === 'show') {   
+                opts.innerHTML = '';
+            }
+            showResults();
         }
     
-    Cookies.set("version", )
     } catch (error) {
         console.error('获取数据失败:', error);
     }
