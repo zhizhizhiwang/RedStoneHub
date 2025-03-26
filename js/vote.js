@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(data => {
         console.log("now version: " + data[0]);
         version = data[0];
-        Cookies.set('version', data[0])
         update_item(data[0]);
 
         if(data[1] === 'result')
