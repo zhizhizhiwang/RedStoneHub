@@ -1,71 +1,53 @@
+# ws_server.py
 import asyncio
 import websockets
-import json
-import logging
-import VisitedListManager
+import threading
+from aioconsole import ainput
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-logging.getLogger('websockets').setLevel(logging.INFO)
+class WSServer:
+    def __init__(self):
+        self.clients = set()
+        self.current_data = "0"
+        self.running = True
 
+    async def handler(self, websocket):
+        self.clients.add(websocket)
+        try:
+            await websocket.send(self.current_data)
+            async for message in websocket:
+                print(f"收到客户端消息: {message}")
+        finally:
+            self.clients.remove(websocket)
 
-name_list = VisitedListManager.VisitedListManager()
+    async def update_data(self):
+        while self.running:
+            new_data = await ainput("输入新数据 (输入 'exit' 退出): ")
+            if new_data.lower() == 'exit':
+                self.running = False
+                await self.shutdown()
+                break
+            self.current_data = new_data
+            await self.broadcast(new_data)
 
+    async def broadcast(self, message):
+        if self.clients:
+            await asyncio.gather(
+                *[client.send(message) for client in self.clients]
+            )
 
-def opt(message: str):
-    try:
-        message_json = json.loads(message)
-        current_scene_json = message_json["currentScene"]
-        current_scene_name = current_scene_json['sceneName'].replace('.txt', '')
-        logging.debug(f"now scene is {current_scene_name}, stack is {message_json['sceneStack']}")
-        name_list.append(current_scene_name)
-    except Exception as e:
-        logging.debug("收到" + message)
-
-async def echo(websocket):
-    try:
-        # 打印握手信息用于调试
-
-        async for message in websocket:
-            opt(message)
-            status_code = 200
-
-            send_code = json.dumps({"status": status_code, "now_node": 0})
-            if message == "ping":
-                send_code = "pong"
-            elif message == "show":
-                name_list.show_graph()
-            elif message == "crash":
-                name_list.crash()
-
-            await websocket.send(send_code)
-    except websockets.exceptions.ConnectionClosed as e:
-        logging.info(f"Connection closed: {e}")
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-
+    async def shutdown(self):
+        for ws in self.clients:
+            await ws.close()
+        print("服务已关闭")
 
 async def main():
-    # 正确配置服务器参数
-    server = await websockets.serve(
-        echo,
-        "localhost",
-        8765,
-        origins=None,  # 允许所有 Origin
-        process_request=None  # 完全禁用 Host 验证
-    )
-
-    # 设置全局异常处理
-    loop = asyncio.get_event_loop()
-
-    def exception_handler(loop, context):
-        msg = context.get("exception", context["message"])
-        logging.error(f"Caught global exception: {msg}")
-
-    loop.set_exception_handler(exception_handler)
-
-    logging.info("WebSocket server is running on ws://localhost:8765")
-    await asyncio.Future()  # 运行直到手动停止
-
+    server = WSServer()
+    async with websockets.serve(server.handler, "localhost", 8765):
+        # 启动控制台输入协程
+        asyncio.create_task(server.update_data())
+        print("WebSocket 服务已启动 ws://localhost:8765")
+        while server.running:
+            await asyncio.sleep(1)
 
 if __name__ == "__main__":
     asyncio.run(main())

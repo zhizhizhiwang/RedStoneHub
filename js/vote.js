@@ -31,62 +31,72 @@ if (Voted === null) {
     localStorage.setItem('Voted', 'null');
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     console.log("页面初始化开始");
-    fetch(`${domain}now-version?token=password`)
-        .then(response => response.text())
-        .then(data => data.split(':'))
-        .then(data => {
-            console.log("now version: " + data[0]);
-            version = data[0];
-            update_item(data[0]);
+    let data = await get_version();
+    data = data.split(':');
 
-            if (data[1] === 'result') {
-                window.mode = 'show'; //只展示结果
-                showResults();
-            } else if (data[1] === 'both') {
-                window.mode = 'both'; //都展示
-                showResults();
-            } else {
-                window.mode = 'vote'; //只展示选项
-            }
-        })
+    console.log("now version: " + data[0]);
+    version = data[0];
+    update_item(data[0]);
+
+    if (data[1] === 'result') {
+        window.mode = 'show'; //只展示结果
+        showResults();
+    } else if (data[1] === 'both') {
+        window.mode = 'both'; //都展示
+        showResults();
+    } else {
+        window.mode = 'vote'; //只展示选项
+    }
+        
 
     setInterval(upgrade, 1 * 60 * 1000);
 });
 
 async function upgrade() {
-    fetch(`${domain}now-version?d=${Date.now()}&token=password`, {
-        headers: {
-            'Cache-Control': 'no-cache, max-age=0',
-            'Pragma': 'no-cache'
-        }})
-        .then(response => response.text())
-        .then(data => data.split(':'))
-        .then(data => {
-            console.log("web version: " + data[0]);
-            if (Cookies === undefined) {
-                console.error("jscookie未加载!");
-                version = data[0];
-                update_item(data[0]);
-            } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
-                console.log("当前version: " + Cookies.get('version') + " 开始同步");
-                version = data[0];
-                update_item(data[0]);
-            }
+    let data = await get_version();
+    data = data.split(':');
+    console.log("now version: " + data[0]);
+    if (Cookies === undefined) {
+        console.error("jscookie未加载!");
+        version = data[0];
+        update_item(data[0]);
+    } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
+        console.log("当前version: " + Cookies.get('version') + " 开始同步");
+        version = data[0];
+        update_item(data[0]);
+    }
 
-            if (data[1] === 'result') {
-                window.mode = 'show'; //只展示结果
-                showResults();
-            } else if (data[1] === 'both') {
-                window.mode = 'both'; //都展示
-                showResults();
-            } else {
-                window.mode = 'vote'; //只展示选项
-            }
-        })
+    if (data[1] === 'result') {
+        window.mode = 'show'; //只展示结果
+        showResults();
+    } else if (data[1] === 'both') {
+        window.mode = 'both'; //都展示
+        showResults();
+    } else {
+        window.mode = 'vote'; //只展示选项
+    }
+        
 }
 
+async function get_version() {
+    return new Promise((resolve, reject) => {
+        let ws = new WebSocket("ws://vip.zj.frp.one:33332");
+        ws.onmessage = function (event) {
+            console.log("收到消息", event.data);
+            ws.close();
+            resolve(event.data); // 确保返回数据
+        };
+        ws.onerror = function (error) {
+            console.error("WebSocket 错误:", error);
+            reject(error); // 捕获错误
+        };
+        ws.onclose = function () {
+            console.log("WebSocket 已关闭");
+        };
+    });
+}
 
 async function get_content(version) {
     try {
