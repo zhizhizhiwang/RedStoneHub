@@ -27,62 +27,64 @@ let votes = JSON.parse(localStorage.getItem('votes')) || { A: 0, B: 0, C: 0 };
 let Voted = localStorage.getItem('Voted');
 
 if (Voted === null) {
-	Voted = 'null';
-	localStorage.setItem('Voted', 'null');
+    Voted = 'null';
+    localStorage.setItem('Voted', 'null');
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     console.log("页面初始化开始");
     fetch(`${domain}now-version?token=password`)
-    .then(response => response.text())
-    .then(data => data.split(':'))
-    .then(data => {
-        console.log("now version: " + data[0]);
-        version = data[0];
-        update_item(data[0]);
+        .then(response => response.text())
+        .then(data => data.split(':'))
+        .then(data => {
+            console.log("now version: " + data[0]);
+            version = data[0];
+            update_item(data[0]);
 
-        if(data[1] === 'result')
-            {
+            if (data[1] === 'result') {
                 window.mode = 'show'; //只展示结果
                 showResults();
-            }else if(data[1] === 'both'){
+            } else if (data[1] === 'both') {
                 window.mode = 'both'; //都展示
                 showResults();
-            }else{
+            } else {
                 window.mode = 'vote'; //只展示选项
             }
-    })
+        })
 
     setInterval(upgrade, 1 * 60 * 1000);
 });
 
 async function upgrade() {
-    fetch(`${domain}now-version`)
-    .then(response => response.text())
-    .then(data => data.split(':'))
-    .then(data => {
-        console.log("web version: " + data[0]);
-        if ( Cookies === undefined ) {
-            console.error("jscookie未加载!");
-            version = data[0];
-            update_item(data[0]);
-        } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
-            console.log("当前version: " + Cookies.get('version') + " 开始同步");
-            version = data[0];
-            update_item(data[0]);
-        }
+    fetch(`${domain}now-version`, {
+        headers: {
+            'Cache-Control': 'no-cache, max-age=0',
+            'Pragma': 'no-cache'
+        }})
+        .then(response => response.text())
+        .then(data => data.split(':'))
+        .then(data => {
+            console.log("web version: " + data[0]);
+            if (Cookies === undefined) {
+                console.error("jscookie未加载!");
+                version = data[0];
+                update_item(data[0]);
+            } else if (Cookies.get('version') === undefined || parseInt(Cookies.get('version')) < parseInt(data[0])) {
+                console.log("当前version: " + Cookies.get('version') + " 开始同步");
+                version = data[0];
+                update_item(data[0]);
+            }
 
-        if(data[1] === 'result')
-        {
-            window.mode = 'show'; //只展示结果
-            showResults();
-        }else if(data[1] === 'both'){
-            window.mode = 'both'; //都展示
-            showResults();
-        }else{
-            window.mode = 'vote'; //只展示选项
-        }
-    })
+            if (data[1] === 'result') {
+                window.mode = 'show'; //只展示结果
+                showResults();
+            } else if (data[1] === 'both') {
+                window.mode = 'both'; //都展示
+                showResults();
+            } else {
+                window.mode = 'vote'; //只展示选项
+            }
+        })
 }
 
 
@@ -104,7 +106,7 @@ async function update_item(version) {
     try {
         const data = await get_content(version.toString());
         title.innerText = data['title'];
-        
+
         if (window.mode !== 'show') {
             const options = data['options'];
             opts.innerHTML = options.map(opt => `
@@ -114,13 +116,13 @@ async function update_item(version) {
             `).join("");
             console.log(opts.innerHTML);
             console.log("选项已更新");
-        }else{
-            if(window.mode === 'show') {   
+        } else {
+            if (window.mode === 'show') {
                 opts.innerHTML = '';
             }
             showResults();
         }
-    
+
     } catch (error) {
         console.error('获取数据失败:', error);
     }
@@ -131,7 +133,7 @@ async function update_item(version) {
 function updateTimer() {
     const now = Date.now();
     const diff = voteEndTime - now;
-    
+
     if (diff <= 0) {
         showResults();
         return;
@@ -139,7 +141,7 @@ function updateTimer() {
 
     const minutes = Math.floor(diff / 60000);
     const seconds = Math.floor((diff % 60000) / 1000);
-    document.getElementById('timer').textContent = 
+    document.getElementById('timer').textContent =
         `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
@@ -155,7 +157,7 @@ function onVerificationError() {
 async function sendVote(voteType, Hash) {
     console.log('发送投票请求:', voteType, Hash);
     if (Hash.length !== 6 || Hash[0] !== '2') return alert("请输入正确学号");
-    
+
     if (window.token === null) return alert("人机验证未通过");
     //学号要符合格式
 
@@ -176,7 +178,7 @@ async function sendVote(voteType, Hash) {
         });
 
         const result = await response.json();
-        
+
         if (result.success) {
             alert('投票成功！');
             window.turnstile.reset();
@@ -247,7 +249,7 @@ async function showResults() {
     } catch (error) {
         console.error('Error fetching results:', error);
         // 可以添加错误提示到页面
-        document.getElementById('resultsContainer').innerHTML = 
+        document.getElementById('resultsContainer').innerHTML =
             `<div class="error">获取结果失败，请刷新重试</div>`;
     }
 }
