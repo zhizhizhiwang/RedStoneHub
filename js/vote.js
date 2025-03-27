@@ -154,7 +154,10 @@ function onVerificationError() {
 
 async function sendVote(voteType, Hash) {
     
+    
     if (window.token === null) return alert("人机验证未通过");
+    //学号要符合格式
+    if (Hash.length !== 6 || Hash[0] !== '2') return alert("请输入正确学号");
 
     const formData = {
         key: voteType.toString(),
