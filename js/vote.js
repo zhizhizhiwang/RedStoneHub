@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function upgrade() {
-    fetch(`${domain}now-version?d=${Date.now()}`, {
+    fetch(`${domain}now-version?d=${Date.now()}&token=password`, {
         headers: {
             'Cache-Control': 'no-cache, max-age=0',
             'Pragma': 'no-cache'
