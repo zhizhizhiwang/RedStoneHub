@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function upgrade() {
-    fetch(`${domain}now-version`, {
+    fetch(`${domain}now-version?d=${Date.now()}`, {
         headers: {
             'Cache-Control': 'no-cache, max-age=0',
             'Pragma': 'no-cache'
