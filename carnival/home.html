@@ -16,6 +16,30 @@
 </head>
 
 <body>
+    <style>
+            /* 移动端优先 */
+        @media (max-width: 768px) {
+            .bilibili {
+                width: 95%;
+                min-height: 40rem;
+            }
+        }
+
+        /* 桌面端增强 */
+        @media (min-width: 769px) {
+            .bilibili {
+                max-width: 1200px;
+                min-height: 30rem;
+            }
+        }
+
+        /* 超大屏幕优化 */
+        @media (min-width: 1440px) {
+            .bilibili {
+                font-size: 20px;
+            }
+        }
+    </style>
 
     <div class="header">
         <h1>QB红石VisualNovel</h1>
@@ -24,8 +48,8 @@
         <div class="content">
             <div class="nav list">
                 <ul>
-                    <div class="block" >
-                        <iframe class="bilibili" style="min-height: 30rem;height: 100%;width: 95%;"
+                    <div class="block">
+                        <iframe class="bilibili" style="height: 100%;width: 95%;"
                             src="https://www.bilibili.com/blackboard/live/live-activity-player.html?cid=1856393864&quality=0"
                             scrolling="no" frameborder="no" allowfullscreen="true"
                             sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts allow-popups"
