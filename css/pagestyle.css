@@ -208,7 +208,6 @@ ol h3{
     display: flex; 
     flex-direction: column;
     text-decoration: none !important;
-    line-height: 1;
     border: 1px solid #000;
     line-height: 1.5rem;
 }
