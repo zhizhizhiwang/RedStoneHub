@@ -63,6 +63,7 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
     position: relative; /* 使其相对定位 */
     z-index: 1; /* 确保在其他元素之上 */
+    height: 98vh; /* 侧边栏高度为视口高度 */
 }
 
 .content {
@@ -98,6 +99,7 @@ body {
     color: #fff;
     padding: 10px;
     text-align: center;
+
 }
 
 .quote {
