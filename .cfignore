@@ -2,5 +2,5 @@ check.py
 *.md
 template.html
 footer.html
-/carnival/server
-/carnival/paper
+/carnival/server/*
+/*/template.html
