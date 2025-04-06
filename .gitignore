@@ -9,3 +9,4 @@ carnival/server/__pycache__/VisitedListManager.cpython-312.pyc
 node_modules/*
 *.env
 *.dev.vars
+*.tags
