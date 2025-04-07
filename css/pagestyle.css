@@ -40,7 +40,7 @@ body {
     padding: 20px;
     margin-bottom: 20px;
     line-height: 20px;
-    
+
 }
 
 .nav-left {
@@ -51,23 +51,73 @@ body {
 
 
 .container {
-    display: flex; /* 使用 Flexbox 布局 */
-    margin: 20px; /* 添加一些外边距 */
+    display: flex;
+    /* 使用 Flexbox 布局 */
+    margin: 20px;
+    /* 添加一些外边距 */
+    min-height: 100vh;
+    /* 确保容器至少占满视口高度 */
 }
 
 .sidebar {
-    width: 250px; /* 侧边栏宽度 */
-    background-color: #ffffff; /* 侧边栏背景色为白色 */
+    width: 250px;
+    /* 侧边栏宽度 */
+    background-color: #f9f9f9;
+    /* 侧边栏背景色为白色 */
     padding: 15px;
-    border-radius: 8px; /* 圆角边框 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
-    position: relative; /* 使其相对定位 */
-    z-index: 1; /* 确保在其他元素之上 */
+    border-radius: 8px;
+    /* 圆角边框 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* 阴影效果 */
+    z-index: 1;
+    /* 确保在其他元素之上 */
+    line-height: 1.7rem;
+    min-height: 100vh;
+    /* 侧边栏高度为视口高度 */
+    right: 20px;
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+}
+
+/* 固定定位的侧边栏 */
+.menu {
+    position: fixed;
+    /* 关键属性 */
+    right: 20px;
+    /* 距离右侧距离 */
+    top: 50%;
+    /* 垂直居中（可根据需求调整） */
+    transform: translateY(-50%);
+    /* 垂直居中修正 */
+    width: 200px;
+    /* 侧边栏宽度 */
+    background-color: #f9f9f9;
+    /* 背景色 */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* 可选阴影效果 */
+    z-index: 1000;
+    /* 确保元素在最上层 */
+    border-radius: 10px;
+    /* 圆角边框 */
     line-height: 1.7rem;
 }
 
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+        /* 小屏幕隐藏 */
+    }
+    .sidebar {
+        display: none;
+    }
+}
+
 .content {
-    flex: 1; /* 主内容区占据剩余空间 */
+    flex: 1;
+    /* 主内容区占据剩余空间 */
     padding: 15px;
 }
 
@@ -76,7 +126,8 @@ body {
 }
 
 .sidebar ul {
-    list-style-type: none; /* 去掉列表前的点 */
+    list-style-type: none;
+    /* 去掉列表前的点 */
     padding: 0;
 }
 
@@ -85,12 +136,15 @@ body {
 }
 
 .sidebar ul li a {
-    text-decoration: none; /* 去掉链接下划线 */
-    color: #333; /* 链接颜色 */
+    text-decoration: none;
+    /* 去掉链接下划线 */
+    color: #333;
+    /* 链接颜色 */
 }
 
 .sidebar ul li a:hover {
-    text-decoration: underline; /* 悬停时添加下划线 */
+    text-decoration: underline;
+    /* 悬停时添加下划线 */
 }
 
 
@@ -133,14 +187,17 @@ body {
     height: auto;
     background-color: #f4f4f4;
     display: flex;
-    transition: transform 0.3s ease; /* 添加平滑过渡效果 */
+    transition: transform 0.3s ease;
+    /* 添加平滑过渡效果 */
     border: 2px solid #333333;
     border-radius: 10px;
-    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    cursor: pointer;
+    /* 鼠标悬停时显示手型光标 */
 }
 
 .touchZoom:hover {
-    transform: scale(0.95); /* 鼠标悬停时放大 */
+    transform: scale(0.95);
+    /* 鼠标悬停时放大 */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -179,12 +236,12 @@ iframe {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-img{
+img {
     max-width: 1000px;
     max-height: 1000px;
 }
 
-ol{
+ol {
     padding: 20px;
     text-align: left;
     margin-bottom: 20px;
@@ -192,11 +249,11 @@ ol{
 }
 
 .nav ul {
-    list-style-type:none;
+    list-style-type: none;
 }
 
-ol h3{
-    font-weight:  bold;
+ol h3 {
+    font-weight: bold;
 }
 
 .block {
@@ -206,7 +263,7 @@ ol h3{
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: left;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     text-decoration: none !important;
     border: 1px solid #000;
@@ -214,17 +271,18 @@ ol h3{
 }
 
 .block h3 {
-    color : #333333;
-    font-weight:auto ;
+    color: #333333;
+    font-weight: auto;
 }
+
 .block p {
-    color:  #333333;
+    color: #333333;
     padding: 5px;
 }
 
 .introduce {
-    display: flex; 
-    justify-content: row !important; 
+    display: flex;
+    justify-content: row !important;
     margin: 0%;
     border-top: 0;
     padding: 0, 0, 0, 0;
@@ -236,4 +294,52 @@ ol h3{
     margin: 0%;
     border-top: 0;
     padding: 0, 0, 0, 0;
+}
+
+/* ---------- 基础引用样式 ---------- */
+blockquote {
+    margin: 1.5em 0;
+    padding: 1em 1.5em;
+    font-family: Georgia, serif;
+    position: relative;
+}
+
+/* ---------- 风格 1：经典边框式 ---------- */
+.quote-classic {
+    border-left: 4px solid #3498db;
+    background: #f8f9fa;
+    color: #2c3e50;
+}
+
+/* ---------- 风格 2：现代背景式 ---------- */
+.quote-modern {
+    background: #fff3e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- 风格 3：斜体强调式 ---------- */
+.quote-italic {
+    font-style: italic;
+    border-left: 3px dashed #e74c3c;
+    color: #7f8c8d;
+}
+
+/* ---------- 引号装饰（可选） ---------- */
+.quote-deco::before {
+    content: "“";
+    font-size: 3em;
+    color: #3498db;
+    position: absolute;
+    left: 10px;
+    top: -10px;
+}
+
+.quote-deco::after {
+    content: "”";
+    font-size: 3em;
+    color: #3498db;
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
 }

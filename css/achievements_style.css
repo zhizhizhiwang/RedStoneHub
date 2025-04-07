@@ -49,6 +49,6 @@
   height: 1.5rem;
 }
 
-.unknow:hover {
+.unknow:hover, .unknow:active {
   color: white !important;
 }
