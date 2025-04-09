@@ -51,4 +51,6 @@
 
 .unknow:hover, .unknow:active, .unknow.active, .unknow:hover a{
   color: white !important;
+  transition: background-color 0.1s;
+  -webkit-tap-highlight-color: transparent;
 }
