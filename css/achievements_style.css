@@ -54,3 +54,9 @@
   transition: background-color 0.1s;
   -webkit-tap-highlight-color: transparent;
 }
+
+.active {
+  color: white !important;
+  transition: background-color 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
