@@ -1,4 +1,4 @@
-document.querySelectorAll('.touchactive').forEach(element => {
+document.querySelectorAll('.unknow').forEach(element => {
     element.addEventListener('touchstart', function (e) {
         e.preventDefault();
         this.classList.add('active');
