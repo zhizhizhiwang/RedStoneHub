@@ -68,7 +68,7 @@ function renderComments(comments, parentElement, level = 0) {
         if (level > 0) {
             commentDiv.classList.add('reply');
         }
-        commentDiv.innerHTML = `<strong>${comment.commenter_id}:</strong> <span class="math-inline">\{comment\.content\} <small\>\(</span>{new Date(comment.created_at * 1000).toLocaleString()})</small>`;
+        commentDiv.innerHTML = `<strong>${comment.commenter_id}:</strong> <span class="math-inline">${comment.content} <small\>\(</span>${new Date(comment.created_at * 1000).toLocaleString()})</small>`;
         parentElement.appendChild(commentDiv);
 
         const replies = comments.filter(reply => reply.reply_to_id === comment.id);
